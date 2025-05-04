@@ -20,21 +20,40 @@ class UserDaoImpl implements UserDAO
         }
     }
 
-
+    /**
+     * Создает нового пользователя в базе данных.
+     *
+     * @param string $username Имя пользователя.
+     * @param string $password Пароль пользователя (хэшируется перед сохранением).
+     * @param string $email Электронная почта пользователя.
+     * @return bool Возвращает true, если пользователь успешно создан, иначе false.
+     */
     public function create($username, $password, $email)
     {
         $sql = "INSERT INTO users (username, password, email, role_id) VALUES (?, ?, ?, 2)";
-        $stmt = $this->connection->prepare($sql);
-        return $stmt->execute([$username, hash('sha256', $password), $email, 2]);
+        return $this->connection->prepare($sql)->execute([$username, hash('sha256', $password), $email]);
     }
 
-    public function update($username, $password, $email)
+    /**
+     * Обновляет данные существующего пользователя в базе данных.
+     *
+     * @param int $role_id Новый идентификатор роли пользователя.
+     * @return bool Возвращает true, если данные пользователя успешно обновлены, иначе false.
+     */
+    public function update($id,$role_id): bool
     {
-        // TODO: Implement update() method.
+        $sql = "UPDATE users SET role_id = ? WHERE id = $id";
+        return $this->connection->prepare($sql)->execute([$role_id]);
     }
 
     public function delete($username)
     {
         // TODO: Implement delete() method.
+    }
+
+    public function findById(int $id) {
+        $stmt = $this->connection->prepare("SELECT * FROM users WHERE id = ?");
+        $stmt->execute([$id]);
+        return $stmt->fetch(\PDO::FETCH_ASSOC) ?: null;
     }
 }

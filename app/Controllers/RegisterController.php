@@ -1,18 +1,27 @@
 <?php
 
 namespace Controllers;
-use database\databaseConnector;
+use handlers\UserFormHandler;
+require_once __DIR__ . "/../../src/handlers/UserFormHandler.php";
 class RegisterController
 {
+    /**
+     * Обрабатывает регистрацию нового пользователя.
+     *
+     * @return string|null Возвращает строку с сообщением об ошибке, если регистрация не удалась,
+     * или перенаправляет пользователя на страницу входа в случае успеха.
+     */
     public function register(){
         session_start();
         require_once __DIR__ . "/../../database/databaseConnector.php";
         $_SESSION['error'] = null;
-        if($_SERVER['REQUEST_METHOD'] === 'POST' && $_POST['action'] === 'register'){
-            $username = isset($_POST['username']) ? $_POST['username'] : '';
-            $password = isset($_POST['password']) ? $_POST['password'] : '';
-            $email = isset($_POST['email']) ? $_POST['email'] : '';
-
+        $handler = new UserFormHandler();
+        $result = $handler->handleRegister();
+        if(is_string($result)){
+            $_SESSION['error'] = $result;
+            return $result;
         }
+        header('Location: /login');
+        exit();
     }
 }

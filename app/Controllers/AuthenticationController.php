@@ -11,8 +11,8 @@ class AuthenticationController
         require_once __DIR__ . "/../../database/databaseConnector.php";
         $_SESSION['error'] = null;
         if ($_SERVER['REQUEST_METHOD'] === 'POST' && $_POST['action'] === 'login') {
-            $username = isset($_POST['username']) ? $_POST['username'] : '';
-            $password = isset($_POST['password']) ? $_POST['password'] : '';
+            $username = $_POST['username'] ?? '';
+            $password = $_POST['password'] ?? '';
 
             $database = new databaseConnector();
             try {
@@ -28,7 +28,7 @@ class AuthenticationController
                     header('Location: /');
                     exit;
                 }
-                $_SESSION['error'] = 'Invalid credentials';
+                $_SESSION['error'] = 'Wrong username or password';
                 header("Location: /login");
                 exit;
 

@@ -6,8 +6,9 @@ use DAO\User\UserDaoImpl;
 use helpers\FormValidator;
 use CreateEntityException;
 
-require_once '../DAO/User/UserDaoImpl.php';
-require_once '../../src/helpers/FormValidator.php';
+require_once __DIR__ . "/../DAO/User/UserDaoImpl.php";
+require_once __DIR__ . "/../../src/helpers/FormValidator.php";
+require_once __DIR__ . "/../../src/exceptions/CreateEntityException.php";
 
 /**
  * Класс UserService предоставляет методы для управления пользователями.
@@ -48,7 +49,7 @@ class UserService
         $password = $this->formValidator::sanitizeData($user['password'] ?? '');
         $email = $this->formValidator::sanitizeData($user['email'] ?? '');
 
-        if ($this->formValidator::requiredField($username) || $this->formValidator::requiredField($password) || $this->formValidator::requiredField($email)) {
+        if (!$this->formValidator::requiredField($username) || !$this->formValidator::requiredField($password) || !$this->formValidator::requiredField($email)) {
             throw new CreateEntityException("Username, password, and email are required.");
         }
 
@@ -65,5 +66,28 @@ class UserService
         }
 
         return $this->userDAO->create($username, $password, $email);
+    }
+
+
+    /**
+     * Обновляет данные существующего пользователя.
+     *
+     * @param array $user Ассоциативный массив с данными пользователя (username, password, email, role_id).
+
+     * @return bool Возвращает true, если данные пользователя успешно обновлены, иначе false.
+     */
+    public function update($user)
+    {
+        $id = $this->formValidator::sanitizeData($user['id'] ?? '');
+        $role_id = $this->formValidator::sanitizeData($user['role_id'] ?? '');
+
+        $role_id = (int)$role_id;
+        $id = (int)$id;
+
+        return $this->userDAO->update($id, $role_id);
+    }
+
+    public function getById(int $id) {
+        return $this->userDAO->findById($id);
     }
 }

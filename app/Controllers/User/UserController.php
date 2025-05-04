@@ -1,10 +1,8 @@
 <?php
 
 namespace Controllers\User;
-
+require_once __DIR__ . "/../../Services/UserService.php";
 use Services\UserService;
-
-require_once '../../Services/UserService.php';
 class UserController
 {
     private $userService;
@@ -15,8 +13,18 @@ class UserController
     }
 
     public function createUser(){
-        return $this->userService->create($_POST);
+        try {
+            return $this->userService->create($_POST);
+        } catch (\CreateEntityException $e) {
+            return $e->getMessage();
+        }
     }
 
-
+    public function updateUser(){
+        try {
+            return $this->userService->update($_POST);
+        } catch (\CreateEntityException $e) {
+            return $e->getMessage();
+        }
+    }
 }
