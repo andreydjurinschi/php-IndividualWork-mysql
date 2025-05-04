@@ -23,8 +23,9 @@ class databaseConnector{
      */
     public function createConnection(){
         try{
-            $connection = new \PDO("mysql:host=$this->serverName;dbname=$this->dbName", $this->user, $this->password);
-            $connection->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
+            $this->connection = new \PDO("mysql:host=$this->serverName;dbname=$this->dbName", $this->user, $this->password);
+            $this->connection->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
+            return $this->connection;
         }catch(\PDOException $e){
             throw new \dbConnectException("Connection failed: " . $e->getMessage());
         }

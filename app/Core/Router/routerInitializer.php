@@ -1,6 +1,9 @@
 <?php
 require_once 'Router.php';
 require_once __DIR__ . '/../Template/Template.php';
+require_once __DIR__ . '/../../../app/Controllers/AuthenticationController.php';
+
+use Controllers\AuthenticationController;
 use router\Router;
 use Template\Template;
 
@@ -9,13 +12,31 @@ $router = new Router();
 
 $template = new Template('layout', __DIR__ . '/../../Views');
 
+$router->addRoute('GET', '/login', function() use ($template){
+    $template->render('loginView', ['title' => 'Login']);
+});
+$router->addRoute('GET', '/logout', function(){
+    $authController = new AuthenticationController();
+    $authController->logout();
+    header("Location: /login");
+});
+
+$router->addRoute('POST', '/login', function() {
+    $authController = new AuthenticationController();
+    $authController->login();
+});
+
 $router->addRoute('GET', '/', function() use ($template){
-    $template->render('mainPage', ['name' => 'HUI']);
+    session_start();
+    if (!isset($_SESSION['user_id'])) {
+        header('Location: /login');
+        exit();
+    }
+    $template->render('mainView', ['title' => 'Main Page']);
 });
 
 try{
     $router->dispatch($path);
 } catch (routeNotFoundException $e) {
-    http_response_code(404);
-    echo $e->getMessage();
+    $template->render('errorView', ['error' => 'route not found']);
 }
