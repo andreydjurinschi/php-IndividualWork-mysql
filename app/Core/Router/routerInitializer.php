@@ -10,7 +10,7 @@ use Template\Template;
 $path = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
 $router = new Router();
 
-$template = new Template('layout', __DIR__ . '/../../Views');
+$template = new Template('layout/layout', __DIR__ . '/../../Views');
 
 $router->addRoute('GET', '/login', function() use ($template){
     $template->render('loginView', ['title' => 'Login']);
@@ -21,7 +21,7 @@ $router->addRoute('GET', '/logout', function(){
     header("Location: /login");
 });
 
-$router->addRoute('POST', '/login', function() {
+$router->addRoute('POST', '/login', function() use ($template) {
     $authController = new AuthenticationController();
     $authController->login();
 });

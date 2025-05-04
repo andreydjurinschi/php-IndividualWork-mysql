@@ -24,16 +24,18 @@ class AuthenticationController
                 if ($user && hash('sha256', $password) === $user['password']) {
                     $_SESSION['user_id'] = $user['id'];
                     $_SESSION['role_id'] = $user['role_id'];
+                    $_SESSION['username'] = $user['username'];
                     header('Location: /');
                     exit;
                 }
                 $_SESSION['error'] = 'Invalid credentials';
                 header("Location: /login");
-                exit();
+                exit;
+
             } catch (\dbConnectException $e) {
                 $_SESSION['error'] = 'Database connection failed';
                 header("Location: /login");
-                exit();
+                exit;
             }
         }
     }

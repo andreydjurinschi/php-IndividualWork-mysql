@@ -10,7 +10,8 @@
     <button type="submit">Login</button>
 </form>
 <?php
+session_start();
 if (isset($_SESSION['error'])) {
-    echo '<div class="error-message">' . $_SESSION['error'] . '</div>';
+    echo $_SESSION['error'];
     unset($_SESSION['error']);
 }?>
