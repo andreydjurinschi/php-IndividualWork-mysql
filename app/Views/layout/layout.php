@@ -5,6 +5,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>STUDNET - <?= isset($title) ? htmlspecialchars($title) : '' ?></title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css">
+    <style>
+        .img-fixed {
+            height: 200px;
+            object-fit: cover;
+            width: 100%;
+        }
+    </style>
+
 </head>
 <body>
 
@@ -18,11 +26,13 @@
 
                 <?php if (isset($_SESSION['user_id'])){ ?>
                     <?php
-                    // Проверяем роль пользователя, чтобы добавить пункт меню для админа
                     if ($_SESSION['role_id'] == 1) {
                         ?>
                         <li class="nav-item"><a class="nav-link text-white" href="/allUsers">All Users</a></li>
                     <?php } ?>
+                    <?php if ($_SESSION['role_id'] == 2): ?>
+                        <li class="nav-item"><a class="nav-link text-white" href="/post/create">Create Post</a></li>
+                    <?php endif; ?>
                     <li class="nav-item"><a class="nav-link text-white" href="/logout">Logout</a></li>
                 <?php } ?>
 

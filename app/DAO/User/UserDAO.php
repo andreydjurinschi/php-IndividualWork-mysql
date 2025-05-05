@@ -9,4 +9,6 @@ interface UserDAO
     public function delete($username);
     public function findById(int $id);
     public function getAll();
+
+    /*public function editProfile($id, $username, $email, $password);*/
 }

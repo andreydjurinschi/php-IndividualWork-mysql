@@ -24,11 +24,11 @@ class UserController
         return $this->userService->getAllUsers();
     }
 
+    public function getUser(int $id): array {
+        return $this->userService->getById($id);
+    }
+
     public function updateUser(){
-        try {
-            return $this->userService->update($_POST);
-        } catch (\CreateEntityException $e) {
-            return $e->getMessage();
-        }
+        return $this->userService->update($_POST);
     }
 }
