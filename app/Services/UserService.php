@@ -35,6 +35,10 @@ class UserService
         $this->formValidator = new FormValidator();
     }
 
+    public function getAllUsers(): array {
+        return $this->userDAO->getAll();
+    }
+
     /**
      * Создает нового пользователя.
      *

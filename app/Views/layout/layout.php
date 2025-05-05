@@ -15,19 +15,26 @@
             <ul class="nav">
                 <li class="nav-item"><a class="nav-link text-white" href="/">Main Page</a></li>
                 <li class="nav-item"><a class="nav-link text-white" href="/allPosts">All Posts</a></li>
+
                 <?php if (isset($_SESSION['user_id'])){ ?>
-                <li class="nav-item"><a class="nav-link text-white" href="/logout">Logout</a></li>
+                    <?php
+                    // Проверяем роль пользователя, чтобы добавить пункт меню для админа
+                    if ($_SESSION['role_id'] == 1) {
+                        ?>
+                        <li class="nav-item"><a class="nav-link text-white" href="/allUsers">All Users</a></li>
+                    <?php } ?>
+                    <li class="nav-item"><a class="nav-link text-white" href="/logout">Logout</a></li>
                 <?php } ?>
 
                 <?php if (!isset($_SESSION['user_id'])){ ?>
-                <li class="nav-item"><a class="nav-link text-white" href="/login">Login</a></li>
-                <li class="nav-item"><a class="nav-link text-white" href="/register">Register</a></li>
+                    <li class="nav-item"><a class="nav-link text-white" href="/login">Login</a></li>
+                    <li class="nav-item"><a class="nav-link text-white" href="/register">Register</a></li>
                 <?php } ?>
-
             </ul>
         </nav>
     </div>
 </header>
+
 
 <main class="container">
     <?= $content ?? '' ?>

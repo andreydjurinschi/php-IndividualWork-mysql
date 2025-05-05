@@ -8,10 +8,12 @@ require_once 'Router.php';
 require_once __DIR__ . '/../Template/Template.php';
 require_once __DIR__ . '/../../../app/Controllers/AuthenticationController.php';
 require_once __DIR__ . '/../../../app/Controllers/RegisterController.php';
+require_once __DIR__ . '/../../../app/Controllers/User/UserController.php';
 require_once __DIR__ . '/../../../src/handlers/UserFormHandler.php';
 
 use Controllers\AuthenticationController;
 use Controllers\RegisterController;
+use Controllers\User\UserController;
 use handlers\UserFormHandler;
 use router\Router;
 use Services\UserService;
@@ -60,6 +62,25 @@ $router->addRoute('POST', '/register', function() use ($template) {
 });
 
 //             --- Маршруты для работы с пользователями ---
+
+$router->addRoute(GET, '/allUsers', function() use ($template){
+    session_start();
+    if (!isset($_SESSION['user_id'])) {
+        header('Location: /login');
+        exit();
+    }
+
+    if ($_SESSION['role_id'] != 1) {
+        $template->render('errorView', ['error' => 'Access denied']);
+        exit();
+    }
+    $userController = new UserController();
+    $allUsers = $userController->getAllUsers();
+    $template->render('UsersViews/users-index', [
+        'title' => 'All Users',
+        'users' => $allUsers
+    ]);
+});
 
 $router->addRoute('GET', '/user/view', function() use ($template){
     session_start();

@@ -8,4 +8,5 @@ interface UserDAO
     public function update($id, $role_id);
     public function delete($username);
     public function findById(int $id);
+    public function getAll();
 }

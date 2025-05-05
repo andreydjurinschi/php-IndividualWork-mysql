@@ -20,6 +20,10 @@ class UserController
         }
     }
 
+    public function getAllUsers(): array {
+        return $this->userService->getAllUsers();
+    }
+
     public function updateUser(){
         try {
             return $this->userService->update($_POST);

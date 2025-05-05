@@ -56,4 +56,11 @@ class UserDaoImpl implements UserDAO
         $stmt->execute([$id]);
         return $stmt->fetch(\PDO::FETCH_ASSOC) ?: null;
     }
+
+    public function getAll(): array {
+        $sql = "SELECT * FROM users";
+        $stmt = $this->connection->prepare($sql);
+        $stmt->execute();
+        return $stmt->fetchAll(\PDO::FETCH_ASSOC);
+    }
 }
