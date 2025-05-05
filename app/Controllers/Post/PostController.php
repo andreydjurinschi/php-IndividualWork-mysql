@@ -50,12 +50,9 @@ class PostController
         return $posts;
     }
 
-    public function searchPostsByTags(array $tagIds): array{
+/*    public function searchPostsByTags(array $tagIds): array{
         return $this->postService->searchPostsByTags($tagIds);
-    }
-
-
-
+    }*/
 
     public function updatePost($id)
     {
@@ -65,7 +62,6 @@ class PostController
             return $e->getMessage();
         }
     }
-
     public function getPost($id)
     {
         return $this->postService->getPostById($id);

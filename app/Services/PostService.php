@@ -53,7 +53,12 @@ class PostService
         $content = $this->formValidator::sanitizeData($post['content'] ?? '');
         $photo_path = $this->formValidator::sanitizeData($post['photo_path'] ?? null);
         $file_path = $this->formValidator::sanitizeData($post['file_path'] ?? null);
-        $tags = isset($post['tags']) ? explode(',', $this->formValidator::sanitizeData($post['tags'])) : [];
+        $tags = [];
+        if (isset($post['tags']) && is_array($post['tags'])) {
+            foreach ($post['tags'] as $tag) {
+                $tags[] = $this->formValidator::sanitizeData($tag);
+            }
+        }
 
         if (!$this->formValidator::requiredField($title) || !$this->formValidator::requiredField($content)) {
             throw new CreateEntityException("Title and content are required.");
@@ -101,7 +106,12 @@ class PostService
         $content = $this->formValidator::sanitizeData($post['content'] ?? '');
         $photo_path = $this->formValidator::sanitizeData($post['photo_path'] ?? null);
         $file_path = $this->formValidator::sanitizeData($post['file_path'] ?? null);
-        $tags = isset($post['tags']) ? explode(',', $this->formValidator::sanitizeData($post['tags'])) : [];
+        $tags = [];
+        if (isset($post['tags']) && is_array($post['tags'])) {
+            foreach ($post['tags'] as $tag) {
+                $tags[] = $this->formValidator::sanitizeData($tag);
+            }
+        }
 
         if (!$this->formValidator::requiredField($title) || !$this->formValidator::requiredField($content)) {
             throw new CreateEntityException("Title and content are required.");

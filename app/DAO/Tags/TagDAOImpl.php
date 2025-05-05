@@ -27,22 +27,21 @@ class TagDAOImpl implements TagDAO
             $sql = "SELECT id FROM tags WHERE name = ?";
             $stmt = $this->connection->prepare($sql);
             $stmt->execute([$tagName]);
-            $row = $stmt->fetch(\PDO::FETCH_ASSOC);
-
-            if ($row) {
-                return $row['id'];
-            }
-
-            $sql = "INSERT INTO tags (name) VALUES (?)";
-            $stmt = $this->connection->prepare($sql);
-            $stmt->execute([$tagName]);
-
-            return $this->connection->lastInsertId();
+            return $stmt->fetch(\PDO::FETCH_ASSOC);
         }
         public function getAllTags(): array
         {
-            $tags = $this->connection->query("SELECT id, name FROM tags")->fetchAll(\PDO::FETCH_ASSOC);
-            var_dump($tags);
+            $tags = $this->connection->query("SELECT * FROM tags")->fetchAll(\PDO::FETCH_ASSOC);
             return $tags;
+        }
+
+        public function getTagForPost($post_id)
+        {
+            $sql = "SELECT t.name FROM tags t
+                    JOIN post_tags pt ON t.id = pt.tag_id
+                    WHERE pt.post_id = ?";
+            $stmt = $this->connection->prepare($sql);
+            $stmt->execute([$post_id]);
+            return $stmt->fetchAll(\PDO::FETCH_COLUMN);
         }
 }

@@ -22,9 +22,22 @@
     </div>
 
     <div class="mb-3">
-        <label for="tags" class="form-label">Tags (comma separated)</label>
-        <input type="text" class="form-control" id="tags" name="tags" placeholder="... Study, Games">
+        <label class="form-label">Tags</label>
+        <div class="row">
+            <?php if (!empty($tags)) : ?>
+                <?php foreach ($tags as $tag) : ?>
+                    <div class="col-sm-6 col-md-4 col-lg-3 mb-2">
+                        <input type="checkbox" class="btn-check" name="tags[]" value="<?= htmlspecialchars($tag['id']) ?>"
+                               id="tag-<?= $tag['id'] ?>">
+                        <label class="btn btn-outline-primary btn-sm" for="tag-<?= $tag['id'] ?>">
+                            <?= htmlspecialchars($tag['name']) ?>
+                        </label>
+                    </div>
+                <?php endforeach; ?>
+            <?php endif; ?>
+        </div>
     </div>
+
 
     <button type="submit" class="btn btn-primary">Create Post</button>
 </form>

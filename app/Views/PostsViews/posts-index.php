@@ -32,7 +32,7 @@
                             <?php if (!empty($post['tags'])): ?>
                                 <div class="mb-2">
                                     <?php foreach ($post['tags'] as $tag): ?>
-                                        <span class="badge bg-secondary"><?= htmlspecialchars($tag) ?></span>
+                                        <span class="badge text-primary">#<?= htmlspecialchars($tag) ?></span>
                                     <?php endforeach; ?>
                                 </div>
                             <?php endif; ?>
@@ -52,7 +52,6 @@
                                 ): ?>
                                     <a href="/post/update?id=<?= $post['id'] ?>" class="btn btn-warning btn-sm">Edit</a>
                                 <?php endif; ?>
-
                             </div>
                         </div>
                     </div>

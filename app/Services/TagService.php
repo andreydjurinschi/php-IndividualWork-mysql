@@ -31,4 +31,9 @@ class TagService
         return $this->tagDao->getAllTags();
     }
 
+    public function getTagForPost($post_id): array
+    {
+        return $this->tagDao->getTagForPost($post_id);
+    }
+
 }

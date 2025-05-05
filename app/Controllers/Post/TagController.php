@@ -18,6 +18,10 @@ class TagController
     {
         return $this->tagService->getAllTags();
     }
+    public function getTagForPost($post_id): array
+    {
+        return $this->tagService->getTagForPost($post_id);
+    }
 }
 
 

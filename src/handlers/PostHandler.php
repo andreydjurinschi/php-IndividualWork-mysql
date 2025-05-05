@@ -14,6 +14,7 @@ class PostHandler
     public function handleCreatePost(): ?string
     {
         if($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['action'] === 'create_post') {
+
             $message = $this->postController->createPost();
             $POST = [];
             if (is_string($message)) {

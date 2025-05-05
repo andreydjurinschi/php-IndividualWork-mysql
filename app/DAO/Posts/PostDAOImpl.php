@@ -76,10 +76,9 @@ class PostDAOImpl implements PostDAO
         $post_id = $this->connection->lastInsertId();
 
         if (!empty($tags)) {
-            foreach ($tags as $tag_name) {
-                $tag_id = $this->tagDAO->getTagId($tag_name);
-                $this->addTagToPost($post_id, $tag_id);
-            }
+                foreach ($tags as $tag_id) {
+                    $this->addTagToPost((int)$post_id, (int)$tag_id);
+                }
         }
 
         return true;
@@ -92,9 +91,8 @@ class PostDAOImpl implements PostDAO
 
 
         if (!empty($tags)) {
-            foreach ($tags as $tag_name) {
-                $tag_id = $this->tagDAO->getTagId($tag_name);
-                $this->addTagToPost($id, $tag_id);
+            foreach ($tags as $tag_id) {
+                $this->addTagToPost((int)$id, (int)$tag_id);
             }
         }
         return true;
@@ -161,10 +159,9 @@ class PostDAOImpl implements PostDAO
 
     public function delete($id)
     {
-        // TODO: Implement delete() method.
     }
 
-    public function addTagToPost(?int $post_id,? int$tag_id)
+    public function addTagToPost(?int $post_id,?int $tag_id)
     {
         if (is_null($post_id) || is_null($tag_id)) {
             return;

@@ -197,31 +197,6 @@ $router->addRoute('GET', '/search', function() use ($template) {
     $template->render('search-results', ['title' => 'Search Results', 'posts' => $posts]);
 });
 
-$router->addRoute('GET', '/search-by-tags', function() use ($template) {
-    $tagController = new TagController();
-    $tags = $tagController->getAllTags();
-    $template->render('search-by-tags', ['tags' => $tags, 'title' => 'Search by Tags']);
-});
-
-$router->addRoute('GET', '/search-by-tags/results', function() use ($template) {
-    $tagIds = $_GET['tags'] ?? [];
-
-    if (empty($tagIds)) {
-        $template->render('search-by-tags', [
-            'tags' => (new TagController())->getAllTags(),
-            'title' => 'Search by Tags',
-            'error' => 'Please select at least one tag.'
-        ]);
-        return;
-    }
-
-    $postController = new PostController();
-    $posts = $postController->searchPostsByTags($tagIds);
-    $template->render('search-results', ['title' => 'Search Results by Tags', 'posts' => $posts]);
-});
-
-
-
 
 //             --- Маршруты для постов ---
 
@@ -232,6 +207,8 @@ $router->addRoute('GET', '/post/update', function() use ($template){
         exit();
     }
     $postController = new PostController();
+    $tagController = new TagController();
+    $tags = $tagController->getAllTags();
     $post = $postController->getPost((int)$_GET['id']);
     if($post['user_id'] != $_SESSION['user_id'] && $_SESSION['role_id'] != 1){
         $template->render('errorView', ['error' => 'Access denied']);
@@ -241,8 +218,9 @@ $router->addRoute('GET', '/post/update', function() use ($template){
         $template->render('errorView', ['error' => 'Post not found']);
         exit();
     }
-    $template->render('PostsViews/edit-post', ['title' => 'Posts', 'post' => $post]);
+    $template->render('PostsViews/edit-post', ['title' => 'Posts', 'post' => $post, 'tags' => $tags]);
 });
+
 $router->addRoute('POST', '/post/update', function() use ($template){
     session_start();
     if (!isset($_SESSION['user_id'])) {
@@ -275,9 +253,11 @@ $router->addRoute('GET', '/allPosts', function() use ($template) {
         header('Location: /login');
         exit();
     }
+    $tagController = new TagController();
+    $tags = $tagController->getAllTags();
     $postController = new PostController();
     $posts = $postController->getAllPosts();
-    $template->render('PostsViews/posts-index', ['title' => 'All Posts', 'posts' => $posts]);
+    $template->render('PostsViews/posts-index', ['title' => 'All Posts', 'posts' => $posts, 'tags' => $tags]);
 });
 
 $router->addRoute('GET', '/post/create', function() use ($template){
@@ -286,7 +266,9 @@ $router->addRoute('GET', '/post/create', function() use ($template){
         header('Location: /login');
         exit();
     }
-    $template->render('PostsViews/create-post', ['title' => 'Create Post']);
+    $tagController = new TagController();
+    $tags = $tagController->getAllTags();
+    $template->render('PostsViews/create-post', ['title' => 'Create Post', 'tags' => $tags]);
 });
 
 $router->addRoute('POST', '/post/create', function() use ($template){
