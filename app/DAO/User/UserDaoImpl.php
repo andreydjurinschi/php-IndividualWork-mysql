@@ -46,9 +46,18 @@ class UserDaoImpl implements UserDAO
         return $this->connection->prepare($sql)->execute([$role_id]);
     }
 
-    public function delete($username)
+    /**
+     * Удаляет пользователя из базы данных по его идентификатору.
+     *
+     * @param int $id Идентификатор пользователя, которого нужно удалить.
+     * @return void
+     */
+    public function delete($id)
     {
-        // TODO: Implement delete() method.
+        $stmt = $this->connection->prepare("DELETE FROM posts WHERE user_id = ?");
+        $stmt->execute([$id]);
+        $stmt = $this->connection->prepare("DELETE FROM users WHERE id = ?");
+        $stmt->execute([$id]);
     }
 
     public function findById(int $id) {

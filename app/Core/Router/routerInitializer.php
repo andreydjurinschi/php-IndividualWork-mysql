@@ -141,7 +141,6 @@ $router->addRoute('GET', '/user/info', function() use ($template){
 $router->addRoute('POST', '/user/update', function() use ($template){
     $handler = new UserFormHandler();
     $result = $handler->handleUpdate();
-
     if (is_string($result)) {
         $template->render('AccountViews/edit-user', [
             'title' => 'Edit User',
@@ -150,6 +149,25 @@ $router->addRoute('POST', '/user/update', function() use ($template){
         exit();
     }
     header('Location: /');
+    exit();
+});
+
+$router->addRoute('POST', '/user/delete', function() use ($template){
+    session_start();
+    if (!isset($_SESSION['user_id'])) {
+        header('Location: /login');
+        exit();
+    }
+    $handler = new UserFormHandler();
+    $result = $handler->handleDelete();
+    if (is_string($result)) {
+        $template->render('AccountViews/edit-user', [
+            'title' => 'Edit User',
+            'error' => 'Error deleting user: ' . $result
+        ]);
+        exit();
+    }
+    header('Location: /allUsers');
     exit();
 });
 

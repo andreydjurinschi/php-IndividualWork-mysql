@@ -22,6 +22,11 @@
                 </div>
                 <button type="submit" class="btn btn-primary btn-block">Submit</button>
             </form>
+        <form method="post" action="/user/delete" onsubmit="return confirm('Are you sure?');">
+            <input type="hidden" name="action" value="delete">
+            <input type="hidden" name="id" value="<?= isset($user) ? $user['id'] : '' ?>">
+            <button type="submit" class="btn btn-danger btn-block mt-2">Delete user</button>
+        </form>
         </div>
         <?php
         if (!empty($error)) { ?>

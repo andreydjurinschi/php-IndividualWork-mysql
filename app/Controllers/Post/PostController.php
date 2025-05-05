@@ -34,7 +34,6 @@ class PostController
                 $post['tags'] = [];
             }
         }
-
         return $posts;
     }
 

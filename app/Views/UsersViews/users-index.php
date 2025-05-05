@@ -21,6 +21,11 @@
                     <?php if ($user['id'] != $_SESSION['user_id']) : ?>
                         <a href="/user/view?user_id=<?= htmlspecialchars($user['id']) ?>" class="btn btn-primary">Edit</a>
                         <a href="/user/info?user_id=<?= htmlspecialchars($user['id']) ?>" class="btn btn-primary">Info</a>
+                        <form method="post" action="/user/delete" class="d-inline" onsubmit="return confirm('Are you sure?');">
+                            <input type="hidden" name="action" value="delete">
+                            <input type="hidden" name="id" value="<?= isset($user) ? $user['id'] : '' ?>">
+                            <button type="submit" class="btn btn-danger">Delete</button>
+                        </form>
                     <?php endif; ?>
                 </td>
             </tr>

@@ -5,10 +5,12 @@ namespace Services;
 use DAO\User\UserDaoImpl;
 use helpers\FormValidator;
 use CreateEntityException;
+use NotFoundException;
 
 require_once __DIR__ . "/../DAO/User/UserDaoImpl.php";
 require_once __DIR__ . "/../../src/helpers/FormValidator.php";
 require_once __DIR__ . "/../../src/exceptions/CreateEntityException.php";
+require_once __DIR__ . "/../../src/exceptions/NotFoundException.php";
 
 /**
  * Класс UserService предоставляет методы для управления пользователями.
@@ -93,5 +95,13 @@ class UserService
 
     public function getById(int $id) {
         return $this->userDAO->findById($id);
+    }
+
+    public function delete($id) {
+    $user = $this->userDAO->findById($id);
+    if(!$user){
+        throw new NotFoundException("User not found.");
+    }
+        $this->userDAO->delete($id);
     }
 }

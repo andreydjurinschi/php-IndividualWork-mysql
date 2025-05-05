@@ -2,6 +2,8 @@
 
 namespace Controllers\User;
 require_once __DIR__ . "/../../Services/UserService.php";
+
+use NotFoundException;
 use Services\UserService;
 class UserController
 {
@@ -30,5 +32,13 @@ class UserController
 
     public function updateUser(){
         return $this->userService->update($_POST);
+    }
+
+    public function deleteUser(int $id){
+        try{
+            return $this->userService->delete($id);
+        } catch (NotFoundException $e) {
+            return $e->getMessage();
+        }
     }
 }
