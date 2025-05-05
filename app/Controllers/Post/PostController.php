@@ -22,13 +22,49 @@ class PostController
         }
     }
 
-    public function getAllPosts(): array {
-        return $this->postService->getAllPosts();
+    public function getAllPosts(): array
+    {
+        $sort = $_GET['sort'] ?? 'desc';
+        $posts = $this->postService->getAll($sort);
+
+        foreach ($posts as &$post) {
+            if (isset($post['tags'])) {
+                $post['tags'] = explode(',', $post['tags']);
+            } else {
+                $post['tags'] = [];
+            }
+        }
+
+        return $posts;
     }
+
+
+    public function searchByTitle($title){
+        $posts = $this->postService->searchByTitle($title);
+        foreach ($posts as &$post) {
+            if (isset($post['tags'])) {
+                $post['tags'] = explode(',', $post['tags']);
+            } else {
+                $post['tags'] = [];
+            }
+        }
+        return $posts;
+    }
+
+    public function searchPostsByTags(array $tagIds): array{
+        return $this->postService->searchPostsByTags($tagIds);
+    }
+
+
+
 
     public function updatePost($id)
     {
-        return $this->postService->update($id, $_POST);
+        try {
+            return $this->postService->update($id, $_POST);
+        } catch (\CreateEntityException $e) {
+            return $e->getMessage();
+        }
     }
 
     public function getPost($id)

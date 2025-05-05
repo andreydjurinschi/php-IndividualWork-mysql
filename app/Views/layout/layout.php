@@ -22,21 +22,16 @@
         <nav>
             <ul class="nav">
                 <li class="nav-item"><a class="nav-link text-white" href="/">Main Page</a></li>
-                <li class="nav-item"><a class="nav-link text-white" href="/allPosts">All Posts</a></li>
 
-                <?php if (isset($_SESSION['user_id'])){ ?>
-                    <?php
-                    if ($_SESSION['role_id'] == 1) {
-                        ?>
+                <?php if (isset($_SESSION['user_id'])) { ?>
+                    <?php if ($_SESSION['role_id'] == 1) { ?>
                         <li class="nav-item"><a class="nav-link text-white" href="/allUsers">All Users</a></li>
                     <?php } ?>
-                    <?php if ($_SESSION['role_id'] == 2): ?>
+                    <?php if ($_SESSION['role_id'] == 2) { ?>
                         <li class="nav-item"><a class="nav-link text-white" href="/post/create">Create Post</a></li>
-                    <?php endif; ?>
+                    <?php } ?>
                     <li class="nav-item"><a class="nav-link text-white" href="/logout">Logout</a></li>
-                <?php } ?>
-
-                <?php if (!isset($_SESSION['user_id'])){ ?>
+                <?php } else { ?>
                     <li class="nav-item"><a class="nav-link text-white" href="/login">Login</a></li>
                     <li class="nav-item"><a class="nav-link text-white" href="/register">Register</a></li>
                 <?php } ?>

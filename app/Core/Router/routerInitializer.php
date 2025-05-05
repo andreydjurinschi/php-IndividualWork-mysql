@@ -9,11 +9,13 @@ require_once __DIR__ . '/../Template/Template.php';
 require_once __DIR__ . '/../../../app/Controllers/AuthenticationController.php';
 require_once __DIR__ . '/../../../app/Controllers/RegisterController.php';
 require_once __DIR__ . '/../../../app/Controllers/User/UserController.php';
+require_once __DIR__ . '/../../../app/Controllers/Post/TagController.php';
 require_once __DIR__ . '/../../Controllers/Post/PostController.php';
 require_once __DIR__ . '/../../../src/handlers/UserFormHandler.php';
 require_once __DIR__ . '/../../../src/handlers/PostHandler.php';
 
 use Controllers\AuthenticationController;
+use Controllers\Post\TagController;
 use Controllers\RegisterController;
 use Controllers\User\UserController;
 use Controllers\Post\PostController;
@@ -158,11 +160,49 @@ $router->addRoute('POST', '/user/update', function() use ($template){
 $router->addRoute('GET', '/', function() use ($template){
     session_start();
     if (!isset($_SESSION['user_id'])) {
-        header('Location: /login');
-        exit();
+        $_SESSION['username'] = 'guest';
     }
-    $template->render('mainView', ['title' => 'Main Page']);
+    $template->render('mainView', ['title' => 'Main Page', 'username' => $_SESSION['username']]);
 });
+
+$router->addRoute('GET', '/search', function() use ($template) {
+    $title = $_GET['title'] ?? '';
+
+
+    if (empty($title)) {
+        $template->render('search-results', ['title' => 'Search Results', 'posts' => []]);
+        return;
+    }
+
+    $postController = new PostController();
+    $posts = $postController->searchByTitle($title);
+    $template->render('search-results', ['title' => 'Search Results', 'posts' => $posts]);
+});
+
+$router->addRoute('GET', '/search-by-tags', function() use ($template) {
+    $tagController = new TagController();
+    $tags = $tagController->getAllTags();
+    $template->render('search-by-tags', ['tags' => $tags, 'title' => 'Search by Tags']);
+});
+
+$router->addRoute('GET', '/search-by-tags/results', function() use ($template) {
+    $tagIds = $_GET['tags'] ?? [];
+
+    if (empty($tagIds)) {
+        $template->render('search-by-tags', [
+            'tags' => (new TagController())->getAllTags(),
+            'title' => 'Search by Tags',
+            'error' => 'Please select at least one tag.'
+        ]);
+        return;
+    }
+
+    $postController = new PostController();
+    $posts = $postController->searchPostsByTags($tagIds);
+    $template->render('search-results', ['title' => 'Search Results by Tags', 'posts' => $posts]);
+});
+
+
 
 
 //             --- Маршруты для постов ---

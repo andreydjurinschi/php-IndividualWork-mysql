@@ -1,12 +1,14 @@
 <form method="post" class="container mt-4">
     <div class="form-group">
         <label for="title">Title</label>
-        <input type="text" name="title" id="title" class="form-control" >
+        <input type="text" name="title" id="title" class="form-control" required>
     </div>
-        <input type="hidden" name="action" value="create_post" class="form-control" >
+
+    <input type="hidden" name="action" value="create_post" class="form-control">
+
     <div class="form-group">
         <label for="content">Content</label>
-        <textarea name="content" id="content" rows="5" class="form-control" ></textarea>
+        <textarea name="content" id="content" rows="5" class="form-control" required></textarea>
     </div>
 
     <div class="form-group">
@@ -19,12 +21,16 @@
         <input type="url" name="file_path" id="file_path" class="form-control" placeholder="https://example.com/file.pdf">
     </div>
 
+    <div class="mb-3">
+        <label for="tags" class="form-label">Tags (comma separated)</label>
+        <input type="text" class="form-control" id="tags" name="tags" placeholder="... Study, Games">
+    </div>
+
     <button type="submit" class="btn btn-primary">Create Post</button>
 </form>
+
 <?php
 if (!empty($error)) { ?>
-    <div class="alert alert-danger mt-3" role="alert"><?= $error?></div>
-    <?php
-}
+    <div class="alert alert-danger mt-3" role="alert"><?= htmlspecialchars($error) ?></div>
+<?php }
 ?>
-

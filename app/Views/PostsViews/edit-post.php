@@ -44,6 +44,11 @@
             <?php endif; ?>
         </div>
 
+        <div class="mb-3">
+            <label for="tags" class="form-label">Tags (comma separated)</label>
+            <input type="text" class="form-control" id="tags" name="tags" placeholder="... Study, Games">
+        </div>
+
         <div class="d-flex justify-content-between align-items-center">
             <button type="submit" class="btn btn-primary">Update Post</button>
             <a href="/post/view?id=<?= htmlspecialchars($post['id']) ?>" class="btn btn-secondary">Cancel</a>

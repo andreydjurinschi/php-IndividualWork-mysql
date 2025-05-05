@@ -36,11 +36,10 @@ class PostService
      *
      * @return array Возвращает массив всех постов.
      */
-    public function getAllPosts(): array
+    public function getAll(string $sort = 'desc'): array
     {
-        return $this->postDao->getAll();
+        return $this->postDao->getAll($sort);
     }
-
     /**
      * Создает новый пост.
      *
@@ -54,6 +53,7 @@ class PostService
         $content = $this->formValidator::sanitizeData($post['content'] ?? '');
         $photo_path = $this->formValidator::sanitizeData($post['photo_path'] ?? null);
         $file_path = $this->formValidator::sanitizeData($post['file_path'] ?? null);
+        $tags = isset($post['tags']) ? explode(',', $this->formValidator::sanitizeData($post['tags'])) : [];
 
         if (!$this->formValidator::requiredField($title) || !$this->formValidator::requiredField($content)) {
             throw new CreateEntityException("Title and content are required.");
@@ -61,8 +61,11 @@ class PostService
         if (!$this->formValidator::validateForm(5, 60, $title) || !$this->formValidator::validateForm(5, 500, $content)) {
             throw new CreateEntityException("Title must be between 5 and 60 characters. Content must be between 5 and 500 characters.");
         }
-        return $this->postDao->create($title, $content, $photo_path, $file_path);
+
+        return $this->postDao->create($title, $content, $photo_path, $file_path, $tags);
     }
+
+
 
     /**
      * Получает пост по его ID.
@@ -77,6 +80,10 @@ class PostService
             return $post;
         }
         return null;
+    }
+
+    public function searchByTitle($title){
+        return $this->postDao->searchByTitle($title);
     }
 
     /**
@@ -94,6 +101,7 @@ class PostService
         $content = $this->formValidator::sanitizeData($post['content'] ?? '');
         $photo_path = $this->formValidator::sanitizeData($post['photo_path'] ?? null);
         $file_path = $this->formValidator::sanitizeData($post['file_path'] ?? null);
+        $tags = isset($post['tags']) ? explode(',', $this->formValidator::sanitizeData($post['tags'])) : [];
 
         if (!$this->formValidator::requiredField($title) || !$this->formValidator::requiredField($content)) {
             throw new CreateEntityException("Title and content are required.");
@@ -102,8 +110,11 @@ class PostService
             throw new CreateEntityException("Title must be between 5 and 60 characters. Content must be between 5 and 500 characters.");
         }
 
-        return $this->postDao->update($id, $title, $content, $photo_path, $file_path);
+        return $this->postDao->update($id, $title, $content, $photo_path, $file_path, $tags);
     }
 
-
+    public function searchPostsByTags(array $tags)
+    {
+        return $this->postDao->searchPostsByTags($tags);
+    }
 }
