@@ -37,4 +37,21 @@ class PostHandler
         }
         return null;
     }
+
+    public function handleDeletePost(int $id)
+    {
+        if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['action'] === 'delete_post') {
+            try {
+                $success = $this->postController->deletePost($id);
+                if (!$success) {
+                    return 'Failed to delete post.';
+                }
+                return true;
+            } catch (\Exception $e) {
+                return $e->getMessage();
+            }
+        }
+        return 'Invalid request.';
+    }
+
 }

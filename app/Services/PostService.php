@@ -123,8 +123,12 @@ class PostService
         return $this->postDao->update($id, $title, $content, $photo_path, $file_path, $tags);
     }
 
-    public function searchPostsByTags(array $tags)
+    public function delete($id){
+        return $this->postDao->delete($id);
+    }
+
+/*    public function searchPostsByTags(array $tags)
     {
         return $this->postDao->searchPostsByTags($tags);
-    }
+    }*/
 }

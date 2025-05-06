@@ -318,6 +318,39 @@ $router->addRoute('GET', '/post/view', function() use ($template) {
         ]);
     }
 });
+$router->addRoute('POST', '/post/delete', function() use ($template) {
+    session_start();
+
+    if (!isset($_SESSION['user_id'])) {
+        header('Location: /login');
+        exit();
+    }
+
+    $id = $_GET['id'] ?? null;
+
+    if (!$id || !is_numeric($id)) {
+        $template->render('ErrorView', [
+            'title' => 'Error',
+            'error' => 'Invalid post ID.'
+        ]);
+        exit();
+    }
+
+    $handler = new PostHandler();
+    $result = $handler->handleDeletePost((int)$id);
+
+    if (is_string($result)) {
+        $template->render('ErrorView', [
+            'title' => 'Delete Post',
+            'error' => 'Error deleting post: ' . $result
+        ]);
+        exit();
+    }
+
+    header('Location: /allPosts');
+    exit();
+});
+
 
 
 

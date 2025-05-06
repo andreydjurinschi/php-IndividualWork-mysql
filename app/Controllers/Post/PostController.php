@@ -22,6 +22,8 @@ class PostController
         }
     }
 
+
+
     public function getAllPosts(): array
     {
         $sort = $_GET['sort'] ?? 'desc';
@@ -67,4 +69,10 @@ class PostController
         return $this->postService->getPostById($id);
     }
 
+    public function deletePost($id): bool
+    {
+        return $this->postService->delete($id);
+    }
+
 }
+

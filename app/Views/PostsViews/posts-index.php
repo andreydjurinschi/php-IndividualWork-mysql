@@ -11,7 +11,7 @@
         <option value="desc" <?= ($_GET['sort'] ?? '') === 'desc' ? 'selected' : '' ?>>Recent</option>
         <option value="asc" <?= ($_GET['sort'] ?? '') === 'asc' ? 'selected' : '' ?>>Latest</option>
     </select>
-    <button type="submit" class="btn btn-primary">Применить</button>
+    <button type="submit" class="btn btn-primary">Apply</button>
 </form>
 
 
@@ -51,6 +51,11 @@
                                     ($_SESSION['user_id'] == $post['user_id'] || ($_SESSION['role_id'] ?? null) == 1)
                                 ): ?>
                                     <a href="/post/update?id=<?= $post['id'] ?>" class="btn btn-warning btn-sm">Edit</a>
+                                    <form method="POST" action="/post/delete?id=<?= $post['id'] ?>" onsubmit="return confirm('Are you sure you want to delete this post?');">
+                                        <input type="hidden" name="action" value="delete_post">
+                                        <button type="submit" class="btn btn-danger">Delete</button>
+                                    </form>
+
                                 <?php endif; ?>
                             </div>
                         </div>

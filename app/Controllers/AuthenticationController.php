@@ -2,42 +2,32 @@
 
 namespace Controllers;
 
-use database\databaseConnector;
-
+require_once __DIR__.'/../../src/handlers/LoginHandler.php';
+use handlers\LoginHandler;
 class AuthenticationController
 {
-    public function login() {
+    public function login()
+    {
         session_start();
-        require_once __DIR__ . "/../../database/databaseConnector.php";
-        $_SESSION['error'] = null;
-        if ($_SERVER['REQUEST_METHOD'] === 'POST' && $_POST['action'] === 'login') {
-            $username = $_POST['username'] ?? '';
-            $password = $_POST['password'] ?? '';
 
-            $database = new databaseConnector();
-            try {
-                $pdo = $database->createConnection();
-                $stmt = $pdo->prepare("SELECT * FROM users WHERE username = :username");
-                $stmt->execute(['username' => $username]);
-                $user = $stmt->fetch(\PDO::FETCH_ASSOC);
+        if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['action'] ?? '') === 'login') {
+            $handler = new LoginHandler();
+            $user = $handler->handleLogin($_POST);
 
-                if ($user && hash('sha256', $password) === $user['password']) {
-                    $_SESSION['user_id'] = $user['id'];
-                    $_SESSION['role_id'] = $user['role_id'];
-                    $_SESSION['username'] = $user['username'];
-                    header('Location: /');
-                    exit;
-                }
-                $_SESSION['error'] = 'Wrong username or password';
-                header("Location: /login");
-                exit;
-
-            } catch (\dbConnectException $e) {
-                $_SESSION['error'] = 'Database connection failed';
-                header("Location: /login");
+            if ($user) {
+                $_SESSION['user_id'] = $user['id'];
+                $_SESSION['role_id'] = $user['role_id'];
+                $_SESSION['username'] = $user['username'];
+                header("Location: /");
                 exit;
             }
+
+            $_SESSION['error'] = 'Wrong username or password';
+            header("Location: /login");
+            exit;
         }
+
+        require __DIR__ . '/../../app/Views/AccountViews/loginView.php';
     }
 
     public function logout()
@@ -45,5 +35,7 @@ class AuthenticationController
         session_start();
         session_unset();
         session_destroy();
+        header("Location: /login");
+        exit;
     }
 }

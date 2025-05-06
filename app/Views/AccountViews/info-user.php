@@ -1,7 +1,6 @@
 <div class="container">
-    <div class="row justify-content-left">
+    <div class="row justify-content-center">
         <div class="col-md-6">
-            <h2 class="mb-4 text-center">Edit <?= isset($user) ? htmlspecialchars($user['username']) : '' ?></h2>
             <form method="post" action="/user/update">
                 <input type="hidden" name="action" value="update">
                 <input type="hidden" name="id" value="<?= isset($user) ? $user['id'] : '' ?>">

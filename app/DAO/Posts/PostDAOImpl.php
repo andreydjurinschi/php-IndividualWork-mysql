@@ -157,9 +157,15 @@ class PostDAOImpl implements PostDAO
         return $stmt->fetchAll(\PDO::FETCH_ASSOC);
     }
 
-    public function delete($id)
+    public function delete($id): bool
     {
+        $stmt = $this->connection->prepare("DELETE FROM post_tags WHERE post_id = ?");
+        $stmt->execute([$id]);
+
+        $stmt = $this->connection->prepare("DELETE FROM posts WHERE id = ?");
+        return $stmt->execute([$id]);
     }
+
 
     public function addTagToPost(?int $post_id,?int $tag_id)
     {

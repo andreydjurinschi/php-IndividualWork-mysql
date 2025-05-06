@@ -3,6 +3,8 @@ namespace DAO\User;
 require_once __DIR__ . "/../../../database/databaseConnector.php";
 require_once __DIR__ . "/UserDAO.php";
 use database\databaseConnector;
+use PDO;
+
 class UserDaoImpl implements UserDAO
 {
     private $connection;
@@ -63,13 +65,21 @@ class UserDaoImpl implements UserDAO
     public function findById(int $id) {
         $stmt = $this->connection->prepare("SELECT * FROM users WHERE id = ?");
         $stmt->execute([$id]);
-        return $stmt->fetch(\PDO::FETCH_ASSOC) ?: null;
+        return $stmt->fetch(PDO::FETCH_ASSOC) ?: null;
     }
 
     public function getAll(): array {
         $sql = "SELECT * FROM users";
         $stmt = $this->connection->prepare($sql);
         $stmt->execute();
-        return $stmt->fetchAll(\PDO::FETCH_ASSOC);
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
+
+    public function findByUsername($username): ?array {
+        $stmt = $this->connection->prepare("SELECT * FROM users WHERE username = :username");
+        $stmt->execute(['username' => $username]);
+        $user = $stmt->fetch(PDO::FETCH_ASSOC);
+        return $user ?: null;
+    }
+
 }
