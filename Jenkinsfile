@@ -11,6 +11,7 @@ pipeline {
         stage('Test PHP') {
             steps {
                 sh 'php -v'  
+            }
         }
     }
 
